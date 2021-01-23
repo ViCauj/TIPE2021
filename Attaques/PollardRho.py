@@ -5,7 +5,7 @@ def Fp(p, g):
     g dans Z/pZ,
     G = <g>
     '''
-    G = [1,g]
+    G = [1, g]
     while G[-1] != 1:
         G.append((G[-1]*g)%p)
     G.pop()
@@ -26,7 +26,7 @@ def S(g, n):
     return int(bin(g)[2:])%n
 
 def DecoupeG(G, n):          #calculs + rapides avec n une puiss de 2
-    GBis=[[] for i in range(n)]
+    GBis=[ [] for i in range(n)]
     for g in G:
         GBis[S(g, n)].append(g)
     return GBis
