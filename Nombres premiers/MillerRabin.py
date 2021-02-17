@@ -1,3 +1,6 @@
+#PAS DE MOI
+import random
+
 def Prime(n):
     """
     Miller-Rabin primality test.
