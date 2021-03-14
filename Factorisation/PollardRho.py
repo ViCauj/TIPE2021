@@ -19,6 +19,9 @@ def PollardFact(N, k = 1):
 def listeD(N):
     n = N
     D = []
+    while n%2 == 0:
+        n //= 2
+        D.append(2)
     while prod(D) != N:
         if Prime(n):
             D.append(n)
@@ -30,5 +33,9 @@ def listeD(N):
             #     D.append(listeD(r))
             D.append(r)
             n //= D[-1]
-    return D
+    res = []                                        #On dégage les doublons
+    for i in D:
+        if not (i in res):      
+            res.append(i)
+    return res
         
