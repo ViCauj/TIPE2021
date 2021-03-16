@@ -6,7 +6,7 @@ def trouveG(listeD, p):
     while test:
         g = rd(1, p)
         for li in listeD:
-            if (g**li)%p == 1:
+            if expoRapMod(g, li ,p) == 1:
                 res = (g, li)
                 test = False
     return res
