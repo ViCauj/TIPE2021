@@ -35,6 +35,7 @@ def listeD(N):
             else:
                 D+=listeD(r)
             n//=D[-1]
+        #print("éhop", D)
     res = []
     for i in D:
         if not (i in res):
