@@ -4,7 +4,7 @@ def prod(L):
         r *= i
     return r
 
-def PollardFact(N, a = 2, k = 1, lim = 10000):
+def PollardFact(N, a = 2, k = 1, lim = 1000):
     def f(x):
         return x**2 + k
     b = f(a)%N
