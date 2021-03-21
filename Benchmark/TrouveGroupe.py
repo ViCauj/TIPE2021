@@ -1,4 +1,4 @@
-from numpy.random import randint as rd
+from random import randint as rd
 
 def trouveG(listeD, p):
     res = 0
