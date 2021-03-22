@@ -1,3 +1,5 @@
+from random import randint as rd 
+
 def prod(L):
     r = 1
     for i in L:
@@ -16,7 +18,7 @@ def PollardFact(N, a = 2, k = 1, lim = 1000):
         d = PGCD(b-a,N)
         compt += 1
         if compt > lim:
-            return PollardFact(N, random.randint(3, N), random.randint(-10, 10), lim)
+            return PollardFact(N, rd(3, N), rd(-10, 10), lim)
     return d
 
 def listeD(N):
