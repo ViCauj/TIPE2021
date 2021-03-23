@@ -17,7 +17,7 @@ for i in range(n):
     moy.append(sum(i for i in res)/len(res))
     delt.append(abs((3.14*N/2)**0.5 - moy[-1]))
    
-# plt.plot(list(range(n)),delt)
-plt.plot(list(range(n)),res,"")
-plt.plot(list(range(n)),moy,"orange")
-plt.plot(list(range(n)),lim,"r")
+# plt.plot(list(range(n)), delt)
+plt.plot(list(range(n)), res, "")
+plt.plot(list(range(n)), moy, "orange")
+plt.plot(list(range(n)), lim, "r")
