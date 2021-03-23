@@ -46,7 +46,7 @@ def Walk(trouple, cste):
         return ((x**2)%p, (2*a)%r, (2*b)%r)
     return ((x*Lg[j])%p, (a+u[j])%r, (b+v[j])%r)
         
-def PollardRho(p, g, n, h, r = -1):
+def PollardRho(p, g, h, r = -1, n = 32):
     '''
     g dans Z/pZ,
     G = <g>,
