@@ -1,4 +1,4 @@
-from numpy.random import randint as rds
+from random import randint as rd
 
 def Fp(p, g):
     '''
@@ -58,9 +58,8 @@ def PollardRho(p, g, h, r = -1, n = 32):
         G, r = Fp(p, g)
     
     ############ CHOIX DE LA MARCHE  A L E A T O I R E !!!!!!!!!!! ############
-    #u, v = list(rds(0, r, n)), list(rds(0, r, n))
-    u = [rds(0,r) for i in range(n)]
-    v = [rds(0,r) for i in range(n)]
+    u = [rd(0,r+1) for i in range(n)]
+    v = [rd(0,r+1) for i in range(n)]
     Lg = [ (((g**u[i])%p)*((h**v[i])%p))%p for i in range(n)]
     cste = Lg, u, v, n, p, r
     trouple1 = (g, 1, 0)
