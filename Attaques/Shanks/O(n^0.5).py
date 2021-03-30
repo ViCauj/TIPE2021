@@ -1,4 +1,4 @@
-def Shanks_en_mieux(A,g,p):
+def Shanks_en_mieux(A, g, p, r):
     s = 1 + int(np.sqrt(p))
     b = euclEtend(g**s,p)[1]%p
     d1 = {1:0}
@@ -7,5 +7,5 @@ def Shanks_en_mieux(A,g,p):
     for i in range(s + 1):#recherche d'une occurrence#
         if ((A*b**i)%p) in d1: # commune#
             x, y = d1[(A*b**i)%p], i
-            return x + y*s  #on stoppe l'algorithme #
+            return (x + y*s)%r  #on stoppe l'algorithme #
             #quand on trouve la solution#
