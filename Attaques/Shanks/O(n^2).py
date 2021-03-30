@@ -4,7 +4,7 @@ def occurence_commune(L1, L2):
             if L1[i] == L2[j]:
                 return (i, j)
 
-def Shanks2(h, g, p, r):
+def Shanks2(p, g, h, r):
     s = 1 + int(p**0.5)
     b = euclEtend(expoRapMod(g, s, p), p)[1]%p
     L1 = [1] + [expoRapMod(g, i, p) for i in range(1,s+1)]
