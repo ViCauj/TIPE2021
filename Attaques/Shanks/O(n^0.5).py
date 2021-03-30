@@ -1,4 +1,4 @@
-def Shanks_en_mieux(h, g, p, r):
+def Shanks05(h, g, p, r):
     s = 1 + int(p**0.5)
     b = euclEtend(expoRapMod(g, s, p),p)[1]%p
     d1 = {1:0}
