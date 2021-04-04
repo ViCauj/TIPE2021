@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Mar 23 16:44:56 2021
-
-@author: CAUJOLLE
-"""
 from time import time
 from random import randint as rd
 import matplotlib.pyplot as plt
@@ -74,7 +68,7 @@ def Walk(trouple, cste):
     x, a, b = trouple
     j = S(x, n)
     if j == 0:
-        return ((x**2)%p, (2*a)%r, (2*b)%r)
+        return (expoRapMod(x, 2, p), (2*a)%r, (2*b)%r)
     return ((x*Lg[j])%p, (a+u[j])%r, (b+v[j])%r)
 
 def Pollard(p, g, h, r = -1, n = 3):
@@ -92,7 +86,7 @@ def Pollard(p, g, h, r = -1, n = 3):
     #u, v = list(rds(0, r, n)), list(rds(0, r, n))
     u = [rd(0,r+1) for i in range(n)]
     v = [rd(0,r+1) for i in range(n)]
-    Lg = [ (((g**u[i])%p)*((h**v[i])%p))%p for i in range(n)]
+    Lg = [ (expoRapMod(g, u[i], p)*expoRapMod(h, v[i], p))%p for i in range(n)]
     cste = Lg, u, v, n, p, r
     trouple1 = (g, 1, 0)
     trouple2 = Walk(trouple1, cste)
@@ -219,7 +213,7 @@ def benchmark(L):
         h = expoRapMod(PGR[1], rd(1, PGR[2] - 1), PGR[0])
         tt.append(PGR[0])
         
-        a, b, n = "O", "-", 20
+        a, b, n = "O", "-", 10
         print(tt[-1]," :")
         print(a*n*0 + b*n*5)
         tPollard.append(benBenchmark(Pollard, PGR[0], PGR[1], PGR[2], h))
@@ -247,5 +241,5 @@ L = [(3, 2, 2), (5, 4, 2 ), (7, 2, 3), (11, 9, 5), (13, 9, 3),
      (59, 12, 29), (67, 40, 11), (71, 45, 7), (79, 38, 13), (83, 69, 41),
      (89, 64, 11), (499, 345, 83), (797, 256, 199), (1091, 3, 109), (1447, 684, 241),
      (2003, 484, 13), (8111, 5152, 811), (8699, 4856, 4349), (10007, 6674, 5003),
-     (11587, 6615, 1931), (14143, 4660, 2357), (66109, 32788, 787), (65467463, 38859570, 1103)]
-
+     (11587, 6615, 1931), (14143, 4660, 2357), (66109, 32788, 787), (65467463, 38859570, 1103),
+     (654656818789, 171720815255, 244411)]
