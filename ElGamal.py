@@ -4,6 +4,7 @@ def clePub(a,p,g):
     return (p,g,g**a%p)     
 
 def cryptCar(car,a,p,g):
+    cleEph = rd.randint(1,p)
     return (g**cleEph%p,ord(car)*(clePub(a,p,g)[2]**cleEph)%p)
 
 def deCryptCar(carChif,a,p):
