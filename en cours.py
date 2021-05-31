@@ -109,13 +109,14 @@ def Pollard(p, g, h, r = -1, n = 3):
 ##################################################################################################
 
 def Shanks05(p, g, h, r):
-    s = 1 + int(p**0.5)
-    b = euclEtend(expoRapMod(g, s, p),p)[1]%p
+    h = h%p
+    s = 1 + int(r**0.5)
+    b = euclEtend(expoRapMod(g, s, p), p)[1]%p
     d1 = {1:0}
     for i in range(1, s + 1): #on crée le dictionnaire#
         d1[expoRapMod(g, i, p)] = i # les elts de L1 sont les clefs#
     for i in range(s + 1):#recherche d'une occurrence#
-        k = expoRapMod(h*b, i, p)
+        k = h*expoRapMod(b, i, p)%p
         if k in d1: # commune#
             x, y = d1[k], i
             return (x + y*s)%r  #on stoppe l'algorithme #
@@ -136,12 +137,14 @@ def occurence_commune(L1, L2):
                 return (i, j)
 
 def Shanks2(p, g, h, r):
-    s = 1 + int(p**0.5)
+    h = h%p
+    s = 1 + int(r**0.5)
     b = euclEtend(expoRapMod(g, s, p), p)[1]%p
     L1 = [1] + [expoRapMod(g, i, p) for i in range(1,s+1)]
-    L2 = [expoRapMod(h*b, i, p) for i in range(s+1)]
+    L2 = [h*expoRapMod(b, i, p)%p for i in range(s+1)]
     x, y = occurence_commune(L1,L2)
     return (x + y*s)%r
+
 
 ##################################################################################################
 ############################################ FIN SHANKS 2 ########################################
@@ -194,7 +197,7 @@ def benBenchmark(f, p, g, r, h):
         res = time() - res
         if r != -1 :
             test = False
-    return res*(10**3)
+    return res
     
 def benchmark(L):
     '''
@@ -220,22 +223,73 @@ def benchmark(L):
         print(a*n*1 + b*n*4)
         tShanks05.append(benBenchmark(Shanks05, PGR[0], PGR[1], PGR[2], h))
         print(a*n*2 + b*n*3)
-        tShanks2.append(benBenchmark(Shanks2, PGR[0], PGR[1], PGR[2], h))
+        #tShanks2.append(benBenchmark(Shanks2, PGR[0], PGR[1], PGR[2], h))
         print(a*n*3 + b*n*2)
-        tBrute.append(benBenchmark(brute, PGR[0], PGR[1], PGR[2], h))
+        #tBrute.append(benBenchmark(brute, PGR[0], PGR[1], PGR[2], h))
         print(a*n*4 + b*n*1)
-        tRandom.append(benBenchmark(random, PGR[0], PGR[1], PGR[2], h))
+        #tRandom.append(benBenchmark(random, PGR[0], PGR[1], PGR[2], h))
         print(a*n*5 + b*n*0)
         print("\n")
         
     plt.plot(tt, tPollard, label = "Pollard")
-    plt.plot(tt, tShanks05, label = "Shank O(n**0.5)")
-    plt.plot(tt, tShanks2, label = "Shank O(n**2)")
-    plt.plot(tt, tBrute, label = "Brute")
-    plt.plot(tt, tRandom, label = "Random")
+    plt.plot(tt, tShanks05, label = "Shanks O(r**0.5)")
+    #plt.plot(tt, tShanks2, label = "Shanks O(r**2)")
+    #plt.plot(tt, tBrute, label = "Brute")
+    #plt.plot(tt, tRandom, label = "Random")
     plt.legend()
+    plt.xlabel('p')
+    plt.ylabel("temps d'éxécution (en s)")
+    
+    plt.savefig('10000.png',dpi=500)
     plt.show()
-
+    
+def benchmark2(L):
+    '''
+    L = [Liste des p, Liste des g, Liste des ordres (= r)]
+    '''
+    tt = []
+    
+    tPollard = []
+    tShanks05 = []
+    tShanks2 = []
+    tBrute = []
+    tRandom = []
+    
+    for i in range(len(L)):
+        PGR = L[i]
+        h = expoRapMod(PGR[1], rd(1, PGR[2] - 1), PGR[0])
+        tt.append(PGR[2])
+        
+        a, b, n = "O", "-", 10
+        print(tt[-1]," :")
+        print(a*n*0 + b*n*5)
+        tPollard.append(benBenchmark(Pollard, PGR[0], PGR[1], PGR[2], h))
+        print(a*n*1 + b*n*4)
+        tShanks05.append(benBenchmark(Shanks05, PGR[0], PGR[1], PGR[2], h))
+        print(a*n*2 + b*n*3)
+        #tShanks2.append(benBenchmark(Shanks2, PGR[0], PGR[1], PGR[2], h))
+        print(a*n*3 + b*n*2)
+        #tBrute.append(benBenchmark(brute, PGR[0], PGR[1], PGR[2], h))
+        print(a*n*4 + b*n*1)
+        #tRandom.append(benBenchmark(random, PGR[0], PGR[1], PGR[2], h))
+        print(a*n*5 + b*n*0)
+        print("\n")
+        
+    plt.plot(tt, tPollard, label = "Pollard")
+    plt.plot(tt, tShanks05, label = "Shanks O(r**0.5)")
+    #plt.plot(tt, tShanks2, label = "Shanks O(r**2)")
+    #plt.plot(tt, tBrute, label = "Brute")
+    #plt.plot(tt, tRandom, label = "Random")
+    plt.legend()
+    plt.xlabel('r')
+    plt.ylabel("temps d'éxécution (en s)")
+    
+    name = "".join(chr(rd(97,122)) for i in range(10))
+    plt.savefig("image\\"+ name+'.png',dpi=500)
+    print(name)
+    
+    plt.show()
+    
 L = [(3, 2, 2), (5, 4, 2 ), (7, 2, 3), (11, 9, 5), (13, 9, 3), 
      (31, 2, 5), (37, 26, 3), (41, 40, 2), (47, 7, 23), (53, 49, 13),
      (59, 12, 29), (67, 40, 11), (71, 45, 7), (79, 38, 13), (83, 69, 41),
@@ -243,3 +297,105 @@ L = [(3, 2, 2), (5, 4, 2 ), (7, 2, 3), (11, 9, 5), (13, 9, 3),
      (2003, 484, 13), (8111, 5152, 811), (8699, 4856, 4349), (10007, 6674, 5003),
      (11587, 6615, 1931), (14143, 4660, 2357), (66109, 32788, 787), (65467463, 38859570, 1103),
      (654656818789, 171720815255, 244411)]
+
+L2 = [(3, 2, 2),
+ (5, 4, 2),
+ (7, 2, 3),
+ (11, 9, 5),
+ (13, 9, 3),
+ (31, 2, 5),
+ (37, 26, 3),
+ (41, 40, 2),
+ (47, 7, 23),
+ (53, 49, 13),
+ (59, 12, 29),
+ (67, 40, 11),
+ (71, 45, 7),
+ (79, 38, 13),
+ (83, 69, 41),
+ (89, 64, 11),
+ (499, 345, 83),
+ (743, 127, 53),
+ (797, 256, 199),
+ (971, 655, 97),
+ (1091, 3, 109),
+ (1447, 684, 241),
+ (2003, 484, 13),
+ (8111, 5152, 811),
+ (8699, 4856, 4349),
+ (10007, 6674, 5003),
+ (11587, 6615, 1931),
+ (14143, 4660, 2357),
+ (66109, 32788, 787),
+ (67157, 50100, 163),
+ (67343, 20661, 3061),
+ (67567, 4462, 11261),
+ (65467463, 38859570, 1103),
+ (66565337, 60653923, 5897),
+ (66566527, 42633117, 2953),
+ (66567343, 24578643, 652621),
+ (586455911, 207714039, 327629),
+ (665965877, 229364624, 166491469),
+ (665966879, 317443264, 543203),
+ (665967019, 366963373, 2707183),
+ (5644648043, 1556261548, 256574911),
+ (5644648781, 529414465, 21001),
+ (5812646633, 1018572633, 55890833),
+ (6424647101, 266865476, 64246471),
+ (6424647923, 1540415202, 12457),
+ (56424647837, 31784652565, 243533),
+ (56424649637, 50249230461, 14106162409),
+ (581264556647, 187682172571, 290632278323),
+ (581264556839, 452343406884, 18979),
+ (581264556883, 250754519206, 12123317),
+ (581264557109, 383444230880, 7388831),
+ (654656818789, 171720815255, 244411),
+ (954564615737, 452626986020, 242453),
+ (954564618143, 776501551948, 912585677)]
+
+M = [(3, 2, 2),
+ (7, 2, 3),
+ (31, 2, 5),
+ (71, 45, 7),
+ (67, 40, 11),
+ (53, 49, 13),
+ (47, 7, 23),
+ (59, 12, 29),
+ (83, 69, 41),
+ (743, 127, 53),
+ (499, 345, 83),
+ (971, 655, 97),
+ (1091, 3, 109),
+ (67157, 50100, 163),
+ (797, 256, 199),
+ (1447, 684, 241),
+ (66109, 32788, 787),
+ (8111, 5152, 811),
+ (65467463, 38859570, 1103),
+ (11587, 6615, 1931),
+ (14143, 4660, 2357),
+ (66566527, 42633117, 2953),
+ (67343, 20661, 3061),
+ (8699, 4856, 4349),
+ (10007, 6674, 5003),
+ (66565337, 60653923, 5897),
+ (67567, 4462, 11261),
+ (6424647923, 1540415202, 12457),
+ (581264556839, 452343406884, 18979),
+ (5644648781, 529414465, 21001),
+ (954564615737, 452626986020, 242453),
+ (56424647837, 31784652565, 243533),
+ (654656818789, 171720815255, 244411),
+ (586455911, 207714039, 327629),
+ (665966879, 317443264, 543203),
+ (66567343, 24578643, 652621),
+ (665967019, 366963373, 2707183),
+ (581264557109, 383444230880, 7388831),
+ (581264556883, 250754519206, 12123317),
+ (5812646633, 1018572633, 55890833),
+ (6424647101, 266865476, 64246471),
+ (665965877, 229364624, 166491469),
+ (5644648043, 1556261548, 256574911),
+ (954564618143, 776501551948, 912585677),
+ (56424649637, 50249230461, 14106162409),
+ (581264556647, 187682172571, 290632278323)]
